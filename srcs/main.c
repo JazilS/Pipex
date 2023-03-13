@@ -6,85 +6,85 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/03/02 15:49:33 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/03/11 14:21:24 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void end(int *fdpipe, char *outfile, char **av, int i, char **envp)
+int	check_f2(t_data *data)
 {
-	pid_t pid2;
-	int fd;
-	
-	pid2 = fork();
-	if(pid2 == 0)
+	data->f2 = open(data->outfile, O_CREAT | O_RDWR | O_TRUNC, 0644);
+	if (data->f2 == -1)
 	{
-		close(fdpipe[1]);
-		fd = open(outfile, O_WRONLY);
-		if (fd == -1)
-			dprintf(1, "test\n");
-		if (dup2(fdpipe[0], STDIN_FILENO) == -1)
-			dprintf(1, "test\n");
-		if (dup2(fd, STDOUT_FILENO) == -1)
-			dprintf(1, "test\n");
-		execve(get_path(av[i]), get_cmd(av[i]), envp);
-	}	
-	waitpid(pid2, NULL, 0);
-}
-void pipex(char **av, char **envp, int i, char *infile)
-{
-	int fdpipe[2];
-	pid_t pid;
-	int fd;
-
-	if (pipe(fdpipe) == -1)
-			dprintf(1, "test\n");
-	pid = fork();
-	if (pid == 0)
-	{
-		close(fdpipe[0]);
-		fd = open(infile, O_RDONLY);
-		if (fd == -1)
-			dprintf(1, "test\n");
-		if (dup2(fd, STDIN_FILENO) == -1)
-			dprintf(1, "test\n");
-		if (dup2(fdpipe[1], STDOUT_FILENO) == -1)
-			dprintf(1, "test\n");
-		execve(get_path(av[i]), get_cmd(av[i]), envp);
+		perror("Outfile ");
+		return (1);
 	}
-	close(fdpipe[0]);
-	close(fdpipe[1]);
-	waitpid(pid, NULL, 0);
+	return (0);
 }
 
-char **get_cmd(char *av)
+void	init(int ac, char **av, t_data *data)
 {
-	char **cmd;
+	t_pipe	*pipe;
+	int		i;
 
-	cmd = ft_split(av, ' ');
-	return (cmd);
+	i = 0;
+	pipe = malloc(sizeof(pipe));
+	data->f1 = open(av[1], O_RDONLY);
+	if (data->f1 == -1)
+		return ;
+	data->fd[0] = -1;
+	data->pipe = pipe;
+	while (++i < ac - 3)
+	{
+		pipe->arg = ft_split(av[i], ' ');
+		pipe->cmd = pipe->arg[0];
+		if (i == ac - 1)
+			pipe->next = NULL;
+		else
+		{
+			pipe->next = malloc(sizeof(t_pipe));
+			pipe = pipe->next;
+		}
+	}
 }
 
-char *get_path(char *av)
+void	pipex(t_data *data, char **envp, int ac)
 {
-	char *path;
+	int		i;
+	int		status;
+	pid_t	pid;
 
-	path = ft_strjoin("/usr/bin/", *get_cmd(av));
-	printf("path = %s\n", path);
-	return (path);
+	i = -1;
+	while (++i < ac - 3)
+	{
+		pid = fork();
+		if (pid < 0)
+			exit(1);
+		else
+		{
+			if (data->prev_fd != -1)
+				dup2(data->prev_fd, 0);
+			if (data->pipe->pip == 1)
+				dup2(data->fd[1], 1);
+			if (execve(data->pipe->cmd, data->pipe->arg, envp) < 0)
+				exit(3);
+		}
+		close(data->fd[1]);
+		data->pipe = data->pipe->next;
+	}
+	while (--i >= 0)
+		wait(&status);
 }
 
 int	main(int ac, char **av, char **envp)
 {
-	(void)ac;
-	int i = 0;
+	t_data *data;
 
-	while (i < ac -3)
-	{
-		printf("%d\n", i);
-		pipex(av, envp, i, av[1]);
-		i++;
-	}
+	data = malloc(sizeof(data));
+	if (!data)
+		return (0);
+	init(ac, av, data);
+	pipex(data, envp, ac);
 	return (0);
 }

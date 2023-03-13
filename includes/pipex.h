@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:25:17 by jsabound          #+#    #+#             */
-/*   Updated: 2023/03/02 15:45:53 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/03/11 04:15:58 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,28 @@
 # include <sys/types.h>
 # include <sys/wait.h>
 
-void	end(int *fdpipe, char *outfile, char **av, int i, char **envp);
-void	pipex(char **av, char **envp, int i, char *infile);
-char	**get_cmd(char *av);
-char	*get_path(char *av);
+typedef struct s_pipe
+{
+	char			**arg;
+	char			*cmd;
+	int				pip;
+	struct s_pipe	*next;
+}					t_pipe;
+
+typedef struct s_data
+{
+	int				fd[2];
+	int				prev_fd;
+	int				nb;
+	int				end;
+	char **path;
+	int				start;
+	int f1;
+	int f2;
+	char *outfile;
+	struct s_pipe	*pipe;
+}					t_data;
+
+void				pipex(t_data *data, char **envp, int ac);
 
 #endif
