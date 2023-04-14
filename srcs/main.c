@@ -6,37 +6,79 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/03/27 23:49:07 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/03 15:34:24 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-// int error()
-// {
-// 	if ()
-// }
-
-void print_tab(char **str)
+void infile (t_data *data)
 {
-	int i =0;
-
-	while (str[i])
-	{
-		printf("%s\n", str[i]);
-		i++;
-	}
+	close(data->fd[0]);
+	data->f1 = open(data->inf, O_RDWR);
+	if (data->f1 == -1)
+		return ;
+	if (dup2(data->f1, STDIN_FILENO) == -1);
+		exit(-1);
+	if (dup2(data->fd[1], STDOUT_FILENO) == -1);
+		exit(-1);
+	data->infile++;
 }
 
-int	check_f2(t_data *data)
+void outfile (t_data *data)
 {
+	close(data->fd[1]);
 	data->f2 = open(data->outfile, O_CREAT | O_RDWR | O_TRUNC, 0644);
 	if (data->f2 == -1)
-	{
 		perror("Outfile ");
-		return (1);
+	if (dup2(data->fd[0], STDIN_FILENO) == -1);
+		exit(-1);
+	if (dup2(data->f2, STDOUT_FILENO) == -1);
+		exit(-1);
+	data->infile++;
+}
+
+void cmd (t_data *data)
+{
+	close(data->fd[0]);
+	if (dup2(data->prev_fd, STDIN_FILENO) == -1);
+		exit(-1);
+	if (dup2(data->fd[1], STDOUT_FILENO) == -1);
+		exit(-1);
+}
+
+void	pipex(t_data *data, char **envp, int ac)
+{
+	int		i;
+	int		status;
+	pid_t	pid;
+
+	i = -1;
+	while (++i < ac - 3)
+	{
+		if (pipe(data->fd) && i < ac - 4)
+			exit(1);
+		data->prev_fd = data->fd[0];
+		pid = fork();
+		if (pid < 0)
+			perror("Fork ");
+		if (pid == 0)
+		{
+			if (data->infile == 0)
+				infile(data);
+			if (data->cmd != 1)
+				cmd(data);
+			if (data->out == 1)
+				outfile(data);
+			if (execve(data->pipe->cmd, data->pipe->arg, envp) < 0)
+				exit(3);
+		}
+		close(data->fd[1]);
+		close(data->prev_fd);
+		data->pipe = data->pipe->next;
 	}
-	return (0);
+	while (--i >= 0)
+		wait(&status);
 }
 
 void	init(int ac, char **av, t_data *data)
@@ -49,10 +91,10 @@ void	init(int ac, char **av, t_data *data)
 	pipe = malloc(sizeof(pipe));
 	if (!pipe)
 		return ;
-	data->f1 = open(av[1], O_RDONLY);
-	if (data->f1 == -1)
-		return ;
 	data->fd[0] = -1;
+	data->infile = 0;
+	data->inf = av[1];
+	data->outfile = av[ac];
 	data->pipe = pipe;
 	while (i++ < ac - 3)
 	{
@@ -70,44 +112,6 @@ void	init(int ac, char **av, t_data *data)
 		j++;
 	}
 }
-
-void	pipex(t_data *data, char **envp, int ac)
-{
-	int		i;
-	int		status;
-	pid_t	pid;
-
-	i = -1;
-	while (++i < ac - 3)
-	{
-		if (data->pipe->next)
-		{
-			if (pipe(data->fd))
-				exit(1);
-			data->prev_fd = data->fd[0];
-			printf("prev_fd = %d\n", data->prev_fd);
-			printf("fd[1] = %d\n", data->fd[1]);
-			data->pipe->pip = 1;
-		}
-		pid = fork();
-		if (pid < 0)
-			exit(1);
-		else
-		{
-			if (data->prev_fd != -1)
-				dup2(data->prev_fd, 0);
-			if (data->pipe->pip == 1)
-				dup2(data->fd[1], 1);
-			if (execve(data->pipe->cmd, data->pipe->arg, envp) < 0)
-				exit(3);
-		}
-		close(data->fd[1]);
-		data->pipe = data->pipe->next;
-	}
-	while (--i >= 0)
-		wait(&status);
-}
-
 int	main(int ac, char **av, char **envp)
 {
 	t_data data;

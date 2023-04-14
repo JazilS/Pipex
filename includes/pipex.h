@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:25:17 by jsabound          #+#    #+#             */
-/*   Updated: 2023/03/27 23:34:40 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/03 15:10:21 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ typedef struct s_pipe
 {
 	char			**arg;
 	char			*cmd;
-	int				pip;
 	struct s_pipe	*next;
 }					t_pipe;
 
@@ -34,12 +33,16 @@ typedef struct s_data
 {
 	int				fd[2];
 	int				prev_fd;
+	int				infile;
+	char			*inf;
+	int				cmd;
 	int				nb;
 	int				end;
 	char			**path;
 	int				start;
 	int				f1;
 	int				f2;
+	int				out;
 	char			*outfile;
 	struct s_pipe	*pipe;
 }					t_data;
