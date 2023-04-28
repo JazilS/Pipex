@@ -6,7 +6,7 @@
 #    By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/29 18:16:16 by jsabound          #+#    #+#              #
-#    Updated: 2023/02/26 12:28:43 by jsabound         ###   ########.fr        #
+#    Updated: 2023/04/27 19:48:44 by jsabound         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -41,7 +41,7 @@ WHITE		=	\033[0;97m
 
 # Sources
 
-SRC_FILES	=	pipex main
+SRC_FILES	=	pipex main parsing free
 
 
 SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))

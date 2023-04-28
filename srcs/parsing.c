@@ -6,24 +6,11 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 03:51:35 by jsabound          #+#    #+#             */
-/*   Updated: 2023/03/11 03:55:01 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/27 20:59:02 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
-
-int	check_parsing(char **str)
-{
-	int	i;
-
-	i = 0;
-	while (++i < 5)
-	{
-		if (!str[i][0])
-			return (i);
-	}
-	return (0);
-}
 
 char	**get_path(char **envp)
 {
@@ -46,37 +33,35 @@ char	**get_path(char **envp)
 	return (path);
 }
 
-int	check_cmd(t_data *data, int cmd)
+int	check_cmd(t_data *data, t_pipe *pipe)
 {
 	int		i;
 	char	*tmp;
+	char	*tmp2;
 
-	i = -1;
-	if (!access(data->pipe->cmd, F_OK))
-		return (1);
-	while (data->path[++i])
+	if (!pipe->arg[0])
 	{
-		tmp = ft_strjoin(data->path[i], data->pipe->cmd);
+		pipe->arg[0] = "' '";
+		return (1);
+	}
+	if (pipe->arg[0][0] == '/')
+	{
+		pipe->path = pipe->arg[0];
+		return (0);
+	}
+	i = -1;
+	tmp2 = ft_strjoin("/", pipe->arg[0]);
+	while (data->path_start[++i])
+	{
+		tmp = ft_strjoin(data->path_start[i], tmp2);
 		if (!access(tmp, F_OK))
 		{
-			free(data->pipe->cmd);
-			data->pipe->cmd = tmp;
-			return (1);
+			free(pipe->path);
+			pipe->path = tmp;
+			return (0);
 		}
 		free(tmp);
 	}
-	return (0);
-}
-
-int	check_file(char *file)
-{
-	int	fd;
-
-	fd = open(file, __O_DIRECTORY);
-	if (fd != -1)
-	{
-		close(fd);
-		return (-2);
-	}
-	return (access(file, R_OK));
+	free(tmp2);
+	return (1);
 }
