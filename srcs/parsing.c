@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 03:51:35 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/27 20:59:02 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/28 19:14:49 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,6 @@ char	**get_path(char **envp)
 
 int	check_cmd(t_data *data, t_pipe *pipe)
 {
-	int		i;
-	char	*tmp;
 	char	*tmp2;
 
 	if (!pipe->arg[0])
@@ -49,8 +47,19 @@ int	check_cmd(t_data *data, t_pipe *pipe)
 		pipe->path = pipe->arg[0];
 		return (0);
 	}
-	i = -1;
 	tmp2 = ft_strjoin("/", pipe->arg[0]);
+	if (!check_cmd2(data, tmp2, pipe))
+		return (0);
+	free(tmp2);
+	return (1);
+}
+
+int	check_cmd2(t_data *data, char *tmp2, t_pipe *pipe)
+{
+	int		i;
+	char	*tmp;
+
+	i = -1;
 	while (data->path_start[++i])
 	{
 		tmp = ft_strjoin(data->path_start[i], tmp2);
@@ -62,6 +71,5 @@ int	check_cmd(t_data *data, t_pipe *pipe)
 		}
 		free(tmp);
 	}
-	free(tmp2);
 	return (1);
 }

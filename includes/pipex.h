@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:25:17 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/27 19:48:37 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/28 19:20:28 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,8 @@ typedef struct s_data
 	int				here_doc;
 	char			*limiter;
 	int				nb_cmd;
+	int				temp;
+	pid_t			pid;
 	struct s_pipe	*pipe;
 
 }					t_data;
@@ -57,10 +59,13 @@ void				infile(t_data *data);
 void				cmd(t_data *data);
 void				pipex(t_data *data, char **envp);
 void				outfile(t_data *data);
-void				init(t_data *data, char **envp);
 void				free_char(char **temp);
 void				ft_free(t_data *data);
 void				free_pipe(t_pipe *pipe);
+void				get_pipe(t_data *data);
 int					here_doc(t_data *data);
+void				main_process(t_data *data);
+int					check_cmd2(t_data *data, char *tmp2, t_pipe *pipe);
+void				init(t_data *data, int j);
 
 #endif
