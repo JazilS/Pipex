@@ -6,27 +6,21 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:39:18 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/28 21:07:24 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:09:48 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/pipex.h"
 
-void	free_pipe(t_pipe *pipe)
+void	free_pipe(t_data *data)
 {
 	t_pipe	*temp;
 
-	temp = pipe;
-	while (pipe)
-	{
-		temp = pipe->next;
-		if (pipe->arg)
-			free_char(pipe->arg);
-		if (pipe->path)
-			free(pipe->path);
-		free(pipe);
-		pipe = temp;
-	}
+	free_char(data->pipe->arg);
+	free(data->pipe->path);
+	temp = data->pipe->next;
+	free(data->pipe);
+	data->pipe = temp;
 }
 
 void	free_char(char **temp)
@@ -48,6 +42,4 @@ void	ft_free(t_data *data)
 {
 	if (data && data->path_start)
 		free_char(data->path_start);
-	if (data && data->pipe)
-		free_pipe(data->pipe);
 }

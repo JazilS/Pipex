@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   forks_bonus.c                                      :+:      :+:    :+:   */
+/*   forks.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:06:01 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/28 21:07:27 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:28:33 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,7 @@
 void	infile(t_data *data)
 {
 	close(data->fd[0]);
-	if (data->here_doc)
-		data->f1 = open(".here_doc_tmp", O_RDWR);
-	else
-		data->f1 = open(data->av[1], O_RDWR);
+	data->f1 = open(data->av[1], O_RDWR);
 	if (data->f1 == -1)
 	{
 		close(data->fd[1]);

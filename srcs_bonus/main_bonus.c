@@ -6,11 +6,11 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/28 21:11:30 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:38:05 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
 void	pipex(t_data *data, char **envp)
 {
@@ -31,7 +31,7 @@ void	pipex(t_data *data, char **envp)
 		}
 		close(data->fd[1]);
 		close(data->prev_fd);
-		data->pipe = data->pipe->next;
+		free_pipe(data);
 	}
 	while (--data->i >= 0)
 		wait(&status);
@@ -63,6 +63,7 @@ void	init(t_data *data, int j)
 		}
 		j++;
 	}
+	data->free_pipe = temp;
 }
 
 int	main(int ac, char **av, char **envp)
@@ -73,6 +74,7 @@ int	main(int ac, char **av, char **envp)
 	data.ac = ac;
 	data.av = av;
 	data.path_start = get_path(envp);
+	data.limiter = NULL;
 	if (!ft_strncmp("here_doc", av[1], 9))
 	{
 		data.here_doc = 1;

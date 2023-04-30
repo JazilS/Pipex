@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:25:17 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/30 19:28:43 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:23:09 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ typedef struct s_data
 	int				start;
 	int				f1;
 	int				f2;
+	int				here_doc;
 	char			*limiter;
 	int				nb_cmd;
 	int				temp;
@@ -63,6 +64,7 @@ void				free_char(char **temp);
 void				ft_free(t_data *data);
 void				free_pipe(t_data *data);
 void				get_pipe(t_data *data);
+int					here_doc(t_data *data);
 void				main_process(t_data *data);
 int					check_cmd2(t_data *data, char *tmp2, t_pipe *pipe);
 void				init(t_data *data, int j);

@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/11 03:51:35 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/28 21:07:09 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/29 18:24:13 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,10 @@ int	check_cmd(t_data *data, t_pipe *pipe)
 	}
 	tmp2 = ft_strjoin("/", pipe->arg[0]);
 	if (!check_cmd2(data, tmp2, pipe))
+	{
+		free(tmp2);
 		return (0);
+	}
 	free(tmp2);
 	return (1);
 }

@@ -6,11 +6,11 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/28 19:05:16 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/28 19:08:09 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:17:05 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/pipex.h"
+#include "../includes/pipex_bonus.h"
 
 int	here_doc(t_data *data)
 {

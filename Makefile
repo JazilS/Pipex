@@ -6,75 +6,51 @@
 #    By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/29 18:16:16 by jsabound          #+#    #+#              #
-#    Updated: 2023/04/28 21:06:48 by jsabound         ###   ########.fr        #
+#    Updated: 2023/04/30 19:24:42 by jsabound         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-# Variables
+SRC_DIR		= ./srcs
+BONUS_DIR	= ./srcs_bonus
+SRCS		=	main.c\
+				forks.c\
+				free.c\
+				parsing.c\
+				pipex.c
+BONUS_SRCS	=	main_bonus.c\
+				forks_bonus.c\
+				free_bonus.c\
+				parsing_bonus.c\
+				pipex_bonus.c\
+				here_doc.c
 
-NAME		= pipex
-INCLUDE		= ./
-LIBFT		= libft
-SRC_DIR		= srcs/
-OBJ_DIR		= objects/
-CC			= cc
-CFLAGS		= -Wall -Wextra -Werror -g3
-RM			= rm -f
-SMAKE		= make --no-print-directory
+OBJS			=	$(addprefix $(SRC_DIR)/, $(SRCS:%.c=%.o))
+BONUS_OBJS		=	$(addprefix $(BONUS_DIR)/, $(BONUS_SRCS:%.c=%.o))
+NAME			=	pipex
+CC				=	gcc
+CFLAGS			=	-Wall -Wextra -Werror -g3
+RM				=	rm -f
 
-# Colors
+.c.o:
+		${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
 
-END			=	\033[0m
-BOLD		=	\033[1m
-UNDER		=	\033[4m
-REV			=	\033[7m
-DEF_COLOR	=	\033[0;39m
-GRAY		=	\033[0;90m
-RED			=	\033[0;91m
-LIGHT_RED	=	\033[0;31m
-GREEN		=	\033[0;92m
-YELLOW		=	\033[0;93m
-BLUE		=	\033[0;94m
-MAGENTA		=	\033[0;95m
-CYAN		=	\033[0;96m
-WHITE		=	\033[0;97m
+$(NAME):	$(OBJS)
+	cd libft && make
+	$(CC) $(CFLAGS) -o $(NAME) $(OBJS) libft/libft.a
 
-# Sources
+all:		${NAME}
 
-SRC_FILES	=	pipex_bonus main_bonus parsing_bonus free_bonus forks_bonus here_doc
+clean:	
+	cd libft && make fclean
+	${RM} ${OBJS} ${BONUS_OBJS}
 
-
-SRC 		= 	$(addprefix $(SRC_DIR), $(addsuffix .c, $(SRC_FILES)))
-OBJ 		= 	$(addprefix $(OBJ_DIR), $(addsuffix .o, $(SRC_FILES)))
-
-###
-
-OBJF		=	.cache_exists
-
-all:		$(NAME)
-
-bonus:		all
-
-$(NAME):	$(OBJ)
-			@$(SMAKE) -C $(LIBFT)
-			@$(CC) $(OBJ) -L $(LIBFT) -lX11 -lXext -lft -lm -o $@
-			@echo "$(GREEN)$(BOLD)pipex compiled!$(DEF_COLOR)"
-
-$(OBJ_DIR)%.o: $(SRC_DIR)%.c | $(OBJF)
-			@$(CC) $(CFLAGS) -I $(INCLUDE) -I $(LIBFT)/includes -c $< -o $@
-
-$(OBJF):
-			@mkdir -p $(OBJ_DIR)
-
-clean:
-			@$(RM) -r $(OBJ_DIR)
-			@echo "$(BLUE)pipex object files cleaned!$(DEF_COLOR)"
-
+bonus:		$(BONUS_OBJS)
+	cd libft && make 
+	$(CC) $(CFLAGS) -o $(NAME) $(BONUS_OBJS) libft/libft.a 
+	
 fclean:		clean
-			@$(RM) $(NAME)
-			@$(SMAKE) -C $(LIBFT) fclean
-			@echo "$(CYAN)pipex executable files cleaned!$(DEF_COLOR)"
+		${RM} ${NAME}
 
 re:			fclean all
 
-.PHONY:		all clean fclean re 
+.PHONY: 	all clean fclean re
