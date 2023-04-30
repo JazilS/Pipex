@@ -6,12 +6,12 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:25:17 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/30 19:23:09 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:40:46 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include "../libft/ft_printf.h"
 # include "../libft/libft.h"

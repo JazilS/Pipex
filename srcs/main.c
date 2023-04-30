@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/04/30 19:20:52 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:40:24 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	pipex(t_data *data, char **envp)
 {
 	int	status;
-	
+
 	data->i = -1;
 	while (++data->i < data->nb_cmd)
 	{
