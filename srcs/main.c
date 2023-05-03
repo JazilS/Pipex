@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/05/04 00:08:46 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/05/04 00:38:59 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,7 +92,7 @@ int	main(int ac, char **av, char **envp)
 		j = 2;
 		init(&data, j);
 		pipex(&data, envp);
-		ft_free(&data); 
+		ft_free(&data);
 	}
 	else
 		ft_printf("Invalid Argument\n");
