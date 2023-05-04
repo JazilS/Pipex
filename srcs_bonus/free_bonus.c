@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/27 19:39:18 by jsabound          #+#    #+#             */
-/*   Updated: 2023/05/04 00:17:29 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/05/05 00:27:53 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,12 @@ void	free_pipe(t_data *data)
 {
 	t_pipe	*temp;
 
-	if (data && data->pipe->arg)
-		free_char(data->pipe->arg);
 	if (data && data->pipe->path)
 		free(data->pipe->path);
+	if (data && data->pipe->arg && ft_strncmp("' '", data->pipe->arg[0], 2))
+		free_char(data->pipe->arg);
+	else
+		free(data->pipe->arg);
 	temp = data->pipe->next;
 	if (data && data->pipe)
 		free(data->pipe);

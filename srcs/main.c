@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/05/04 00:38:59 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/05/05 00:21:55 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	pipex(t_data *data, char **envp)
 	data->i = -1;
 	while (++data->i < data->nb_cmd)
 	{
+		dprintf(1, "check = %d\n", data->pipe->check);
 		get_pipe(data);
 		if (data->pid == 0)
 		{
@@ -75,6 +76,11 @@ void	init_data(t_data *data, char **av, int ac, char **envp)
 	data->f1 = open(data->av[1], O_RDWR);
 	if (data->f1 == -1)
 	{
+		if (!access(av[1], F_OK))
+		{
+			perror(data->av[1]);
+			exit(EXIT_FAILURE);
+		}
 		perror(data->av[1]);
 		exit(EXIT_FAILURE);
 	}
