@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:29 by jsabound          #+#    #+#             */
-/*   Updated: 2023/05/05 00:15:22 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/05/06 18:08:59 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ void	get_pipe(t_data *data)
 		{
 			ft_free(data);
 			free_pipe(data);
-			return (perror("Pipe "));}
+			return (perror("Pipe "));
 		}
+	}
 	else
 		close(data->fd[1]);
 	data->pid = fork();

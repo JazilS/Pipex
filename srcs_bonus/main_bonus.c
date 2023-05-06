@@ -6,7 +6,7 @@
 /*   By: jsabound <jsabound@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/26 09:11:27 by jsabound          #+#    #+#             */
-/*   Updated: 2023/05/03 21:18:31 by jsabound         ###   ########.fr       */
+/*   Updated: 2023/05/06 18:11:09 by jsabound         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,7 @@ void	init_data(t_data *data, char **av, int ac, char **envp)
 		check_f1(data);
 	}
 	data->nb_cmd = data->ac - 3 - data->here_doc;
-	data->fd[0] = -1;
+	data->fd[0] = 1;
 }
 
 int	main(int ac, char **av, char **envp)
